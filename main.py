@@ -56,7 +56,8 @@ def download_file(BUCKET_NAME, file_name):
 def index():
     try:
         files = get_list_of_files(BUCKET_NAME)
-        page = """<body>
+        page = """<body style='background-color: #acfaa7; color: white;'>
+
         <h1>Upload an Image</h1>
         <form method="post" enctype="multipart/form-data" action="/upload">
             <input type="file" name="form_file" accept="image/jpeg"/>
