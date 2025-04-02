@@ -27,3 +27,4 @@ options:
   logging: CLOUD_LOGGING_ONLY
 images:
   - 'us-central1-docker.pkg.dev/flaskimage/flaskimage-repo/flaskimage:blue'
+ 
