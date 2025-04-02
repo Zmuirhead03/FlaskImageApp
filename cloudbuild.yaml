@@ -23,6 +23,7 @@ steps:
       - '--revision-suffix=blue'
       - '--no-traffic'
       - '--allow-unauthenticated'
-
+options:
+          logs_bucket: "cloudlogs"
 images:
   - 'us-central1-docker.pkg.dev/flaskimage/flaskimage-repo/flaskimage:blue'
