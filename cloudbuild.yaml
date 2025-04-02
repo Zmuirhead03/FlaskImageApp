@@ -10,21 +10,19 @@ steps:
   # Deploy image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
-    args: 
+    args:
       - 'run'
       - 'deploy'
       - 'flaskimage'
       - '--image'
-      - 'us-central1-docker.pkg.dev/flaskimage/flaskimage-repo/flaskimage:blue'
+      - 'us-central1-docker.pkg.dev/flaskimage/flaskimage-repo/flaskimage:$COMMIT_SHA'
       - '--region'
       - 'us-central1'
-      - '--platform'
-      - 'managed'
-      - '--revision-suffix=blue'
-      - '--no-traffic'
-      - '--allow-unauthenticated'
+      - '--revision-suffix'
+      - '$SHORT_SHA'
+
 options:
   logging: CLOUD_LOGGING_ONLY
+
 images:
   - 'us-central1-docker.pkg.dev/flaskimage/flaskimage-repo/flaskimage:blue'
- 
