@@ -1,14 +1,19 @@
 steps:
-  - name: gcr.io/cloud-builders/gcloud
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/flaskimage-blue', '.']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/flaskimage-blue']
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
     args:
       [
         'run', 'deploy', 'flaskimage',
-        '--image', 'gcr.io/$PROJECT_ID/flaskimage',
+        '--image', 'gcr.io/$PROJECT_ID/flaskimage-blue',
         '--region', 'us-central1',
         '--platform', 'managed',
-        '--allow-unauthenticated',
-        '--tag', '${_REVISION}'
+        '--revision-suffix', 'blue',
+        '--no-traffic',
+        '--allow-unauthenticated'
       ]
-
-images:
-  - gcr.io/$PROJECT_ID/flaskimage
