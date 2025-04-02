@@ -1,14 +1,14 @@
 steps:
   - name: gcr.io/cloud-builders/gcloud
-    args: [
-      'run', 'deploy', 'flaskimage',
-      '--image', 'gcr.io/$PROJECT_ID/flaskimage',
-      '--region', 'us-central1',
-      '--platform', 'managed',
-      '--allow-unauthenticated',
-      '--tag', '${_REVISION}'
-    ]
+    args:
+      [
+        'run', 'deploy', 'flaskimage',
+        '--image', 'gcr.io/$PROJECT_ID/flaskimage',
+        '--region', 'us-central1',
+        '--platform', 'managed',
+        '--allow-unauthenticated',
+        '--tag', '${_REVISION}'
+      ]
 
 images:
   - gcr.io/$PROJECT_ID/flaskimage
-
