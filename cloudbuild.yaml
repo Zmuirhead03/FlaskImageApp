@@ -1,13 +1,20 @@
 steps:
-  # Build the image using the commit SHA as tag
+  # Step 1: Build Docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/flaskimage/flaskimage-repo/flaskimage:$COMMIT_SHA', '.']
+    args: [
+      'build',
+      '-t', 'us-central1-docker.pkg.dev/flaskimage/flaskimage-repo/flaskimage:$COMMIT_SHA',
+      '.'
+    ]
 
-  # Push the image
+  # Step 2: Push to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/flaskimage/flaskimage-repo/flaskimage:$COMMIT_SHA']
+    args: [
+      'push',
+      'us-central1-docker.pkg.dev/flaskimage/flaskimage-repo/flaskimage:$COMMIT_SHA'
+    ]
 
-  # Deploy to Cloud Run with revision suffix
+  # Step 3: Deploy to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -20,6 +27,21 @@ steps:
       - 'us-central1'
       - '--revision-suffix'
       - '$SHORT_SHA'
+      - '--tag'
+      - 'green'
+
+  # Step 4: Set 50/50 traffic split between blue and green
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'services'
+      - 'update-traffic'
+      - 'flaskimage'
+      - '--region'
+      - 'us-central1'
+      - '--to-tags'
+      - 'blue=50,green=50'
 
 options:
   logging: CLOUD_LOGGING_ONLY
