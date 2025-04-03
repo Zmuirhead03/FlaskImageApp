@@ -1,13 +1,20 @@
 steps:
-  # Build the image
+  # Step 1: Build the Docker image and tag it with the commit SHA
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/flaskimage/flaskimage-repo/flaskimage:blue', '.']
+    args: [
+      'build',
+      '-t', 'us-central1-docker.pkg.dev/flaskimage/flaskimage-repo/flaskimage:$COMMIT_SHA',
+      '.'
+    ]
 
-  # Push the image to Artifact Registry
+  # Step 2: Push the image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/flaskimage/flaskimage-repo/flaskimage:blue']
+    args: [
+      'push',
+      'us-central1-docker.pkg.dev/flaskimage/flaskimage-repo/flaskimage:$COMMIT_SHA'
+    ]
 
-  # Deploy image to Cloud Run
+  # Step 3: Deploy to Cloud Run with revision suffix
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -25,4 +32,4 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 images:
-  - 'us-central1-docker.pkg.dev/flaskimage/flaskimage-repo/flaskimage:blue'
+  - 'us-central1-docker.pkg.dev/flaskimage/flaskimage-repo/flaskimage:$COMMIT_SHA'
